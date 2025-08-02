@@ -1,0 +1,25 @@
+{
+  "name": "farert-wasm",
+  "version": "1.0.0",
+  "description": "C/C++ WebAssembly development environment",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "make",
+    "clean": "make clean",
+    "serve": "make serve",
+    "dev": "make && make serve"
+  },
+  "keywords": [
+    "webassembly",
+    "wasm",
+    "c",
+    "cpp",
+    "emscripten"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
