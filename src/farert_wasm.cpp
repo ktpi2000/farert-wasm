@@ -127,6 +127,14 @@ std::string getFareStringResult() {
     return "";
 }
 
+// Get detailed FareInfo as JSON
+std::string getFareInfoJson() {
+    if (g_calcRoute) {
+        return g_calcRoute->calcFare();
+    }
+    return "{}";
+}
+
 std::string debugStationsResult() {
     std::string result = "";
     
@@ -177,13 +185,9 @@ int farert_calculate_fare() {
     g_calcRoute = new CalcRouteWrapper(*g_route);
     if (!g_calcRoute) return 0;
     
-    FARE_INFO* fareInfo = g_calcRoute->calcFare();
-    if (fareInfo != nullptr) {
-        // Return result based on original calcFare logic
-        // 0: success, 1: incomplete route, negative: error
-        int resultCode = fareInfo->resultCode();
-        delete fareInfo; // Clean up memory
-        return (resultCode >= 0) ? 1 : 0; // 1 for success or recoverable, 0 for failure
+    std::string fareJson = g_calcRoute->calcFare();
+    if (!fareJson.empty() && fareJson != "{}") {
+        return 1; // Calculation succeeded
     }
     return 0; // Calculation failed
 }
@@ -344,7 +348,7 @@ std::string getCompanyOrPrefectName(int id) {
 
 // 会社・都道府県データ取得（JSON形式）
 std::string getCompanyAndPrefectsAsJson() {
-    CompanyPrefectData data = RouteUtility::getCompanyAndPrefects();
+    RouteUtility::CompanyPrefectData data = RouteUtility::getCompanyAndPrefects();
     std::string json = "{";
     json += "\"companies\":[";
     for (size_t i = 0; i < data.companies.size(); i++) {
@@ -395,7 +399,7 @@ std::string getRouteDetailsAsJson() {
     json += "\"stationCount\":" + std::to_string(g_route->getRouteCount()) + ",";
     json += "\"startStationId\":" + std::to_string(g_route->startStationId()) + ",";
     json += "\"lastStationId\":" + std::to_string(g_route->lastStationId()) + ",";
-    json += "\"isEnd\":" + (g_route->isEnd() ? "true" : "false");
+    json += "\"isEnd\":" + std::string(g_route->isEnd() ? "true" : "false");
     json += "}";
     return json;
 }
@@ -455,4 +459,7 @@ EMSCRIPTEN_BINDINGS(farert_module) {
     // ===== 拡張API: 高度な経路操作 =====
     emscripten::function("getCurrentRoute", &getCurrentRouteAsJson);
     emscripten::function("getRouteDetails", &getRouteDetailsAsJson);
+    
+    // ===== 拡張API: 運賃詳細情報 =====
+    emscripten::function("getFareInfoJson", &getFareInfoJson);
 }
