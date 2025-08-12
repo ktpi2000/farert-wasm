@@ -1,17 +1,9 @@
-# Emscripten環境の確認と設定
-EMSDK_ENV = ~/priv/farert.repos/emsdk/emsdk_env.sh
-
 # Emscripten環境チェック
 check_emsdk:
-	@if [ ! -f $(EMSDK_ENV) ]; then \
-		echo "❌ Emscripten SDKが見つかりません: $(EMSDK_ENV)"; \
-		echo "💡 以下のコマンドを実行してください:"; \
-		echo "   source setup_env.sh && make"; \
-		exit 1; \
-	fi
 	@if ! command -v em++ >/dev/null 2>&1; then \
 		echo "❌ em++コマンドが見つかりません"; \
 		echo "💡 以下のコマンドを実行してください:"; \
+		echo "   export EMSDK_PATH=/path/to/your/emsdk"; \
 		echo "   source setup_env.sh && make"; \
 		exit 1; \
 	fi
