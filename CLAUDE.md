@@ -10,6 +10,18 @@ This is a C/C++ to WebAssembly migration project that converts a Japanese railwa
 
 **重要**: ビルド前にEmscripten環境を設定する必要があります。
 
+### 初回セットアップ
+```bash
+# 方法1: .env.localファイルを使用（推奨）
+cp .env.sample .env.local
+# .env.localファイルを編集してEMSDK_PATHを設定
+source setup_env.sh && make
+
+# 方法2: 環境変数で直接設定
+export EMSDK_PATH=/path/to/your/emsdk
+source setup_env.sh && make
+```
+
 ### 方法1: 環境設定スクリプトを使用（推奨）
 ```bash
 source setup_env.sh && make          # ビルド
@@ -23,19 +35,11 @@ npm run dev         # ビルド + サーバー起動
 npm run clean       # クリーンアップ
 ```
 
-### 方法3: 手動で環境設定
-```bash
-source ~/priv/farert.repos/emsdk/emsdk_env.sh
-make                # ビルド
-make serve          # 開発サーバー起動
-make help           # ヘルプ表示
-```
-
 ## Development Environment Setup
 
 q../- コミットメッセージは conventional commits 形式で書いてください
 
-1. Emscripten SDK is installed at `~/priv/farert.repos/emsdk/`
+1. Emscripten SDK is installed at `export EMSDK_PATH=/path/to/your/emsdk`
 2. Use `setup_env.sh` script to activate environment automatically
 3. Build outputs to `dist/` directory
 
